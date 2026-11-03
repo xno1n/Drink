@@ -1,0 +1,17 @@
+# Runs the PULSE web app container. The database is Supabase:
+#   - local development: `supabase start` (Supabase CLI runs its own Docker stack for Postgres/Auth/Storage)
+#   - production: Supabase Cloud or self-hosted Supabase (see docs/DEPLOYMENT.md)
+# NEXT_PUBLIC_SUPABASE_URL must be a URL BOTH the browser and this container can reach (e.g. https://api.example.com).
+# For plain local development use `npm run dev` on the host instead of this file.
+services:
+  app:
+    build:
+      context: .
+      args:
+        NEXT_PUBLIC_SUPABASE_URL: ${NEXT_PUBLIC_SUPABASE_URL:?set in .env}
+        NEXT_PUBLIC_SUPABASE_ANON_KEY: ${NEXT_PUBLIC_SUPABASE_ANON_KEY:?set in .env}
+    ports: ["3000:3000"]
+    environment:
+      NEXT_PUBLIC_SUPABASE_URL: ${NEXT_PUBLIC_SUPABASE_URL}
+      NEXT_PUBLIC_SUPABASE_ANON_KEY: ${NEXT_PUBLIC_SUPABASE_ANON_KEY}
+    restart: unless-stopped
